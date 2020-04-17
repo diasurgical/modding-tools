@@ -136,11 +136,49 @@ var monsterIdMap = [
 
 /** Map object tileset to dun ids (ObjTypeConv) */
 var objectIdMap = [
-	105, 5, 0, 108, 0, 7, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0,
-	15, 0, 16, 0, 0, 0, 19, 21, 77, 0, 80, 0, 83, 0, 0, 2, 3, 4, 0, 0,
-	30, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 36, 37, 0, 0, 112, 65, 91,
-	0, 0, 0, 0, 38, 39, 51, 0, 70, 71, 72, 73, 74, 75, 76, 53, 54, 55,
-	56, 57, 58, 59, 0, 109, 0, 0, 111, 110, 0, 0,
+	105,5,
+	123, // DevilutionX
+	108,
+	124, // DevilutionX
+	7,6,8,
+	118,119,120,121,122,138,129, // DevilutionX
+	0, // object ID 52
+	145,146, // DevilutionX
+	0, // object ID 88
+	14,
+	0, // object ID 64
+	15,
+	0, // object ID 61
+	16,
+	0, // object ID 91
+	0, // object ID 65
+	0, // object ID 87
+	19,21,77,
+	0, // object ID 68
+	80,
+	137, // DevilutionX
+	83,
+	0, // object ID 70
+	0, // object ID 97
+	2,3,4,
+	136,127, // DevilutionX
+	30,
+	133, // DevilutionX
+	9,
+	139,140,141,142,143,144, // DevilutionX
+	1,
+	116,131,147, // DevilutionX
+	36,37,
+	134,128, // DevilutionX
+	112,65,91,
+	130,113,132,117, // DevilutionX
+	38,39,51,135,70,71,72,73,74,75,76,
+	53,54,55,56,57,58,59,
+	0, // object ID 56
+	109,
+	125,126, // DevilutionX
+	111,110,
+	115,114, // DevilutionX
 ];
 
 /**
