@@ -1,74 +1,148 @@
+var trans;
+
 var dunMapFormat = {
     name: "Diablo map format",
 	extension: "dun",
 
 	write: function(map, fileName) {
-		var m = {
-			width: map.width,
-			height: map.height,
-			layers: []
-		};
+		// Convert to dPiece coords
+		var dunWidth = map.width * 2;
+		var dunHeight = map.height * 2;
 
+		// Init .dun layer arrays
+		var tileIDs = Array(map.width).fill().map(()=>Array(map.height).fill(0));
+		var monstIds = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
+		var objIds = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
+		trans = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
+
+		// Combine layers
 		for (var i = 0; i < map.layerCount; i++) {
 			var layer = map.layerAt(i);
 			if (layer.isTileLayer) {
-				var rows = [];
 				for (var y = 0; y < layer.height; y++) {
-					var row = [];
-					for (var x = 0; x < layer.width; x++)
-						row.push(layer.cellAt(x, y).tileId);
-					rows.push(row);
+					for (var x = 0; x < layer.width; x++) {
+						tileIDs[x][y] = layer.cellAt(x, y).tileId + 1;
+					}
 				}
-				m.layers.push(rows);
+			} else if (layer.isObjectLayer) {
+				for (var j = 0; j < layer.objectCount; j++) {
+					var obj = layer.objects[j];
+					var x = obj.x / 32 - 1;
+					var y = obj.y / 32 - 1;
+					console.log(obj.tile ? obj.tile.type : null);
+					if (obj.tile && obj.tile.tileset.name == "monsters") {
+						monstIds[x][y] = obj.tile.id + 1;
+					} else if (obj.tile && obj.tile.tileset.name == "objects") {
+						objIds[x][y] = obj.tile.id + 1;
+					} else if (obj.type == "transparancy") {
+						applyTransparancy(dunWidth, dunHeight, obj);
+					}
+				}
 			}
 		}
 
-		var dpeiceIDs = m.layers[0]; // use layer 0 as dungeon piece ID layer.
-		var tileIDs = [];
-		for (var y = 0; y < m.height; y++) {
-			var row = [];
-			for (var x = 0; x < m.width; x++) {
-				var tileID = dpeiceIDs[x][y] + 1;
-				console.log(`tileID ${tileID}`);
-				row.push(tileID);
-			}
-			tileIDs.push(row);
-		}
-
-		var dunWidth = m.width;
-		var dunHeight = m.height;
-
-		// DUN format:
-		//    width:   uint16
-		//    height:  uint16
-		//    tileIDs: [width][height]uint16
-		const buffer = new ArrayBuffer(2 * (1 + 1 + dunWidth * dunHeight));
+		// Reserve buffer in size of file
+		const buffer = new ArrayBuffer(2 * ( // uint16
+			1 + 1 // width  and height
+			+ map.width * map.height // tiles
+			+ dunWidth * dunHeight // unused
+			+ dunWidth * dunHeight // monsters
+			+ dunWidth * dunHeight // objects
+			+ dunWidth * dunHeight // transparancy
+		));
 
 		const view = new DataView(buffer);
-		view.setInt16(0, dunWidth, true); // littleEndian=true
-		view.setInt16(2, dunHeight, true);
-		var i = 0;
-		for (var y = 0; y < dunHeight; y++) {
-			for (var x = 0; x < dunWidth; x++) {
-				var tileID = tileIDs[x][y];
-				// 1 for width, 1 for height, and i for tile IDs. each is 2 bytes in size.
-				var offset = 2*(1 + 1 + i);
-				view.setInt16(offset, tileID, true);
-				i++;
+		var i = 0; // uint offset
+
+		 // width
+		view.setInt16(2 * i++, map.width, true); // littleEndian=true
+		 // height
+		view.setInt16(2 * i++, map.height, true);
+
+		// Tiles
+		for (var y = 0; y < map.height; y++) {
+			for (var x = 0; x < map.width; x++) {
+				view.setInt16(2 * i++, tileIDs[x][y], true);
 			}
 		}
 
+		// Skip unused layer
+		i += dunWidth * dunHeight;
+
+		// Monsters
+		for (var y = 0; y < dunHeight; y++) {
+			for (var x = 0; x < dunWidth; x++) {
+				view.setInt16(2 * i++, monstIds[x][y], true);
+			}
+		}
+		// Objects
+		for (var y = 0; y < dunHeight; y++) {
+			for (var x = 0; x < dunWidth; x++) {
+				view.setInt16(2 * i++, objIds[x][y], true);
+			}
+		}
+		// Transparancy
+		for (var y = 0; y < dunHeight; y++) {
+			for (var x = 0; x < dunWidth; x++) {
+				view.setInt16(2 * i++, trans[x][y], true);
+			}
+		}
+
+		// Write to file
 		var file = new BinaryFile(fileName, BinaryFile.WriteOnly);
 		file.write(buffer);
 		file.commit();
 	},
 }
 
-tiled.registerMapFormat("dun", dunMapFormat)
+/**
+ * Mark dPieces with in transparent areas with the transparancy id
+ */
+function applyTransparancy(width, height, obj) {
+	if (obj.shape == MapObject.Rectangle) {
+		var polygon = [
+			{x: obj.x, y: obj.y },
+			{x: obj.x + obj.width, y: obj.y },
+			{x: obj.x + obj.width, y: obj.y + obj.height },
+			{x: obj.x, y: obj.y + obj.height },
+			{x: obj.x, y: obj.y },
+		];
+	} else if (obj.shape == MapObject.Polygon) {
+		polygon = obj.polygon;
+		for (var i = 0; i < polygon.length; i++) {
+			polygon[i].x += obj.x;
+			polygon[i].y += obj.y;
+		}
+	} else {
+		console.log("unsupported transparancy shape on object");
+		return;
+	}
 
-// Generated using `gen_tile_id_mapping`; DO NOT EDIT.
-//townTileIDFromTile["{top=1257, right=259, left=1258, bottom=261}"] = 342;
-//l1TileIDFromTile["{top=450, right=451, left=452, bottom=453}"] = 206;
-//l2TileIDFromTile["{top=558, right=22, left=559, bottom=268}"] = 160;
-//l3TileIDFromTile["{top=559, right=182, left=560, bottom=31}"] = 156;
-//l4TileIDFromTile["{top=453, right=454, left=455, bottom=456}"] = 137;
+	for (var y = 0; y < height; y++) {
+		for (var x = 0; x < width; x++) {
+			if (inside(x, y, polygon)) {
+				trans[x][y] = obj.id;
+			}
+		}
+	}
+}
+
+/**
+ * Check if a cordinate is inside a polygon
+ * @see http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+ */
+function inside(x, y, polygon) {
+    var inside = false;
+    for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        var xi = polygon[i].x / 32, yi = polygon[i].y / 32 + 1;
+        var xj = polygon[j].x / 32, yj = polygon[j].y / 32 + 1;
+
+        var intersect = ((yi > y) != (yj > y))
+            && (x <= (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+
+    return inside;
+};
+
+tiled.registerMapFormat("dun", dunMapFormat)
