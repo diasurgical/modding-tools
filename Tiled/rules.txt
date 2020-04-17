@@ -1,0 +1,2 @@
+rules/cathedral.tmx
+rules/cathedral_dual.tmx
