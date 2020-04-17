@@ -27,13 +27,15 @@ var dunMapFormat = {
 			} else if (layer.isObjectLayer) {
 				for (var j = 0; j < layer.objectCount; j++) {
 					var obj = layer.objects[j];
+					if (!obj)
+						continue; // Skip recently deleted objects
 					var x = obj.x / 32 - 1;
 					var y = obj.y / 32 - 1;
 					console.log(obj.tile ? obj.tile.type : null);
 					if (obj.tile && obj.tile.tileset.name == "monsters") {
 						monstIds[x][y] = obj.tile.id + 1;
 					} else if (obj.tile && obj.tile.tileset.name == "objects") {
-						objIds[x][y] = obj.tile.id + 1;
+						objIds[x][y] = objectIdMap[obj.tile.id];
 					} else if (obj.type == "transparancy") {
 						applyTransparancy(dunWidth, dunHeight, obj);
 					}
@@ -94,6 +96,15 @@ var dunMapFormat = {
 		file.commit();
 	},
 }
+
+/** Map object tileset to dun ids (ObjTypeConv) */
+var objectIdMap = [
+	105, 5, 0, 108, 0, 7, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0,
+	15, 0, 16, 0, 0, 0, 19, 21, 77, 0, 80, 0, 83, 0, 0, 2, 3, 4, 0, 0,
+	30, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 36, 37, 0, 0, 112, 65, 91,
+	0, 0, 0, 0, 38, 39, 51, 0, 70, 71, 72, 73, 74, 75, 76, 53, 54, 55,
+	56, 57, 58, 59, 0, 109, 0, 0, 111, 110, 0, 0,
+];
 
 /**
  * Mark dPieces with in transparent areas with the transparancy id
