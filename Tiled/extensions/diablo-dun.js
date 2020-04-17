@@ -31,12 +31,11 @@ var dunMapFormat = {
 						continue; // Skip recently deleted objects
 					var x = obj.x / 32 - 1;
 					var y = obj.y / 32 - 1;
-					console.log(obj.tile ? obj.tile.type : null);
 					if (obj.tile && obj.tile.tileset.name == "monsters") {
 						monstIds[x][y] = monsterIdMap[obj.tile.id];
 					} else if (obj.tile && obj.tile.tileset.name == "objects") {
 						objIds[x][y] = objectIdMap[obj.tile.id];
-					} else if (obj.type == "transparancy") {
+					} else if (!obj.tile && layer.name == "transparancy") {
 						applyTransparancy(dunWidth, dunHeight, obj);
 					}
 				}
