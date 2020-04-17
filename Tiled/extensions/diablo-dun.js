@@ -33,7 +33,7 @@ var dunMapFormat = {
 					var y = obj.y / 32 - 1;
 					console.log(obj.tile ? obj.tile.type : null);
 					if (obj.tile && obj.tile.tileset.name == "monsters") {
-						monstIds[x][y] = obj.tile.id + 1;
+						monstIds[x][y] = monsterIdMap[obj.tile.id];
 					} else if (obj.tile && obj.tile.tileset.name == "objects") {
 						objIds[x][y] = objectIdMap[obj.tile.id];
 					} else if (obj.type == "transparancy") {
@@ -96,6 +96,43 @@ var dunMapFormat = {
 		file.commit();
 	},
 }
+
+var monsterIdMap = [
+	1,2,3,4, // Zombies
+	5,6,7,8, // Fallen spear
+	9,10,11,12, // Skeleton axe
+	13,14,15,16, // Fallen
+	17,18,19,20, // Scavangers
+	21,22,23,24, // Skelleton bow
+	25,26,27,28, // Skelleton sword
+	0, // Invisible Lord
+	29,30,31,32, // Hidden
+	0, // Lord Sayter
+	33,34,35,36, // Goat men
+	37,39,38,40, // Bats
+	41,42,43,44, // Goat bow
+	45,46,47,48, // Acid
+	49, // Skeleton king
+	0, // Butcher
+	50,51,52,53, // Overloards
+	// 54,55,56,57 // Worms
+	58,59,60,61, // Magma
+	62,63,64,65, // Rhino
+	66,67,68,69, // Bondemons
+	74,75,76,77, // Firemen
+	83,82,84,85, // Thunder
+	127, // Big fallen
+	86,87,88,89, // Garboyl
+	90,91,92,93, // Balrog
+	94,95,96,97, // Vipers
+	98,99,100,101, // Black knight
+	102,103,104,105, // Unraveler
+	106,107,108,109, // Succubi
+	110,111,112,113, // Counselor
+	117, // Golem
+	115, // Diablo
+	128, // Malignus
+];
 
 /** Map object tileset to dun ids (ObjTypeConv) */
 var objectIdMap = [
