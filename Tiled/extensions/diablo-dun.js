@@ -4,6 +4,62 @@ var dunMapFormat = {
     name: "Diablo map format",
 	extension: "dun",
 
+	read: function(fileName) {
+		var file = new BinaryFile(fileName, BinaryFile.ReadOnly);
+		const buffer = file.readAll();
+		const view = new DataView(buffer);
+		var i = 0; // uint16 offset
+
+		var map = new TileMap();
+		map.tileWidth = 128;
+		map.tileHeight = 64;
+		map.orientation = TileMap.Isometric;
+		map.width = view.getInt16(2 * i, true);
+		i++;
+		map.height = view.getInt16(2 * i, true);
+		i++;
+
+		var tileset = tiled.mapEditor.tilesetsView.currentTileset;
+
+		if (tileset) {
+			// Attach the currently opened tilset
+			map.addTileset(tileset);
+		}
+
+		layer = new TileLayer("Tile Layer 1");
+		layer.width = map.width;
+		layer.height = map.height;
+		layer.size = Qt.size(map.width, map.height);
+		tiles = layer.edit();
+
+		// Apply all the tiles
+		for (var y = 0; y < layer.height; y++) {
+			for (var x = 0; x < layer.width; x++) {
+				tileID = view.getInt16(2 * i, true);
+				i++;
+				if (tileID == 0 || !tileset) {
+					continue;
+				}
+
+				tiles.setTile(x, y, tileset.tile(tileID - 1));
+			}
+		}
+		tiles.apply();
+
+		map.addLayer(layer);
+
+
+		layer = new ObjectGroup("Objects");
+		// TODO place monsters and objects
+		map.addLayer(layer);
+
+		layer = new ObjectGroup("transparancy");
+		// TODO convert transparancy to poloygons
+		map.addLayer(layer);
+
+		return map;
+	},
+
 	write: function(map, fileName) {
 		// Convert to dPiece coords
 		var dunWidth = map.width * 2;
