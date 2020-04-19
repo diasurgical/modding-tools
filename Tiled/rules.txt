@@ -1,2 +1,4 @@
+rules/L5tileFix.tmx
+rules/DRLG_L1Shadows.tmx
 rules/cathedral.tmx
 rules/cathedral_dual.tmx
