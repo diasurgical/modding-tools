@@ -1,7 +1,7 @@
 var trans;
 
 var dunMapFormat = {
-    name: "Diablo map format",
+	name: "Diablo map format",
 	extension: "dun",
 
 	read: function(fileName) {
@@ -14,16 +14,24 @@ var dunMapFormat = {
 		map.tileWidth = 128;
 		map.tileHeight = 64;
 		map.orientation = TileMap.Isometric;
-		map.width = view.getInt16(2 * i, true);
-		i++;
-		map.height = view.getInt16(2 * i, true);
-		i++;
+		map.width = view.getInt16(2 * i++, true);
+		map.height = view.getInt16(2 * i++, true);
 
-		var tileset = tiled.mapEditor.tilesetsView.currentTileset;
-
-		if (tileset) {
-			// Attach the currently opened tilset
-			map.addTileset(tileset);
+		var mainTileset;
+		var monsterTileset;
+		var objectTileset;
+		for (var t = 0; t < tiled.openAssets.length; t++) {
+			if (!tiled.openAssets[t].isTileset) {
+				continue;
+			}
+			if (tiled.openAssets[t].name == "objects") {
+				objectTileset = tiled.openAssets[t];
+			} else if (tiled.openAssets[t].name == "monsters") {
+				monsterTileset = tiled.openAssets[t];
+			} else {
+				mainTileset = tiled.openAssets[t];
+			}
+			map.addTileset(tiled.openAssets[t]);
 		}
 
 		layer = new TileLayer("Tile Layer 1");
@@ -35,27 +43,101 @@ var dunMapFormat = {
 		// Apply all the tiles
 		for (var y = 0; y < layer.height; y++) {
 			for (var x = 0; x < layer.width; x++) {
-				tileID = view.getInt16(2 * i, true);
-				i++;
-				if (tileID == 0 || !tileset) {
+				tileID = view.getInt16(2 * i++, true);
+				if (tileID == 0 || !mainTileset) {
 					continue;
 				}
 
-				tiles.setTile(x, y, tileset.tile(tileID - 1));
+				tiles.setTile(x, y, mainTileset.tile(tileID - 1));
 			}
 		}
 		tiles.apply();
 
 		map.addLayer(layer);
 
+		// Convert to dPiece coords
+		var dunWidth = map.width * 2;
+		var dunHeight = map.height * 2;
 
-		layer = new ObjectGroup("Objects");
-		// TODO place monsters and objects
-		map.addLayer(layer);
+		// Skip unused layer
+		i += dunWidth * dunHeight;
 
-		layer = new ObjectGroup("transparancy");
-		// TODO convert transparancy to poloygons
-		map.addLayer(layer);
+		if (buffer.byteLength <= i * 2) {
+			return map;
+		}
+
+		// Monsters
+		var monsters = new ObjectGroup("Monsters");
+		for (var y = 0; y < dunHeight; y++) {
+			for (var x = 0; x < dunWidth; x++) {
+				var monsterId = view.getInt16(2 * i++, true);
+				if (!monsterId || !monsterTileset) {
+					continue;
+				}
+				var monster = new MapObject();
+				monster.x = (x + 1) * 32;
+				monster.y = (y + 1) * 32;
+				var mi = monsterIdToTileId[monsterId - 1];
+				if (mi == -1) {
+					tiled.alert("Unknown monster id: " + monsterId);
+					continue;
+				}
+				monster.tile = monsterTileset.tile(mi);
+				monster.width = monster.tile.width;
+				monster.height = monster.tile.height;
+				monsters.addObject(monster);
+			}
+		}
+		map.addLayer(monsters);
+
+		if (buffer.byteLength <= i * 2) {
+			return map;
+		}
+
+		// Objects
+		var objects = new ObjectGroup("Objects");
+		for (var y = 0; y < dunHeight; y++) {
+			for (var x = 0; x < dunWidth; x++) {
+				var objectId = view.getInt16(2 * i++, true);
+				if (!objectId || !objectTileset) {
+					continue;
+				}
+				var object = new MapObject();
+				object.x = (x + 1) * 32;
+				object.y = (y + 1) * 32;
+				var oi = objectIdToTileId[objectId];
+				if (oi == -1) {
+					tiled.alert("Unknown object id: " + objectId);
+					continue;
+				}
+				object.tile = objectTileset.tile(oi);
+				object.width = object.tile.width;
+				object.height = object.tile.height;
+				objects.addObject(object);
+			}
+		}
+		map.addLayer(objects);
+
+		if (buffer.byteLength <= i * 2) {
+			return map;
+		}
+
+		// Tracking what has been converted in to larger rectangles
+		trans = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
+
+		// Transparancy
+		var transparancy = new ObjectGroup("transparancy");
+		for (var y = 0; y < dunHeight; y++) {
+			for (var x = 0; x < dunWidth; x++) {
+				var objectId = view.getInt16(2 * i++, true);
+				if (!objectId || trans[x][y]) {
+					continue;
+				}
+				var rect = findTrangsRectangle(view, x, y, dunWidth, dunHeight, i - 1, objectId);
+				transparancy.addObject(rect);
+			}
+		}
+		map.addLayer(transparancy);
 
 		return map;
 	},
@@ -88,9 +170,19 @@ var dunMapFormat = {
 					var x = obj.x / 32 - 1;
 					var y = obj.y / 32 - 1;
 					if (obj.tile && obj.tile.tileset.name == "monsters") {
-						monstIds[x][y] = monsterIdMap[obj.tile.id];
+						var mi = monsterIdToTileId.indexOf(obj.tile.id);
+						if (mi == -1) {
+							tiled.alert("Unmapped monster tile: " + obj.tile.id);
+							continue;
+						}
+						monstIds[x][y] = mi + 1;
 					} else if (obj.tile && obj.tile.tileset.name == "objects") {
-						objIds[x][y] = objectIdMap[obj.tile.id];
+						var oi = objectIdToTileId.indexOf(obj.tile.id);
+						if (oi == -1 || oi == 0) { // object ids are saved as +1
+							tiled.alert("Unmapped object tile: " + obj.tile.id);
+							continue;
+						}
+						objIds[x][y] = oi;
 					} else if (!obj.tile && layer.name == "transparancy") {
 						applyTransparancy(dunWidth, dunHeight, obj);
 					}
@@ -152,88 +244,119 @@ var dunMapFormat = {
 	},
 }
 
-var monsterIdMap = [
-	1,2,3,4, // Zombies
-	5,6,7,8, // Fallen spear
-	9,10,11,12, // Skeleton axe
-	13,14,15,16, // Fallen
-	17,18,19,20, // Scavangers
-	21,22,23,24, // Skelleton bow
-	25,26,27,28, // Skelleton sword
-	0, // Invisible Lord
-	29,30,31,32, // Hidden
-	0, // Lord Sayter
-	33,34,35,36, // Goat men
-	37,39,38,40, // Bats
-	41,42,43,44, // Goat bow
-	45,46,47,48, // Acid
-	49, // Skeleton king
-	0, // Butcher
-	50,51,52,53, // Overloards
-	// 54,55,56,57 // Worms
-	58,59,60,61, // Magma
-	62,63,64,65, // Rhino
-	66,67,68,69, // Bondemons
-	74,75,76,77, // Firemen
-	83,82,84,85, // Thunder
-	127, // Big fallen
-	86,87,88,89, // Garboyl
-	90,91,92,93, // Balrog
-	94,95,96,97, // Vipers
-	98,99,100,101, // Black knight
-	102,103,104,105, // Unraveler
-	106,107,108,109, // Succubi
-	110,111,112,113, // Counselor
-	117, // Golem
-	115, // Diablo
-	128, // Malignus
+/** Map monster tileset to dun ids (MonstConvTbl) */
+var monsterIdToTileId = [
+	  0,   1,   2,   3, // Zombie
+	  4,   5,   6,   7, // Fall spear
+	  8,   9,  10,  11, // Skeleton axe
+	 12,  13,  14,  15, // Fallen sword
+	 16,  17,  18,  19, // Scavenger
+	 20,  21,  22,  23, // Skeleton bow
+	 24,  25,  26,  27, // Skeleton sword
+	 29,  30,  31,  32, // Hidden
+	 34,  35,  36,  37, // Goatman mace
+	 38,  40,  39,  41, // Bat
+	 42,  43,  44,  45, // Goatman bow
+	 46,  47,  48,  49, // Acid beast
+	 50,                // Skeleton king
+	 52,  53,  54,  55, // Overlord
+	 -1,  -1,  -1,  -1, // Wyrm
+	 56,  57,  58,  59, // Magma demon
+	 60,  61,  62,  63, // Horned demon
+	 64,  65,  66,  67, // Bone demon
+	 -1,  -1,  -1,  -1, // unused
+	 68,  69,  70,  71, // Fireman
+	 -1,  -1,  -1,  -1, // unused
+	 72,  73,  74,  75, // Storm demon
+	 77,  78,  79,  80, // Gargoyle
+	 81,  82,  83,  84, // Balrog
+	 85,  86,  88,  87, // Viper
+	 89,  90,  91,  92, // Knight
+	 93,  94,  95,  96, // Unraveler
+	 97,  98,  99, 100, // Succubus
+	101, 102, 103, 104, // Counselor
+	 -1,
+	106, // Diablo
+	 -1,
+	105, // Golem
+	 -1, -1,
+	 -1, // Monster from blood1.dun and blood2.dun
+	 -1, -1, -1,
+	 -1, // Snotspill from banner2.dun
+	 -1, -1,
+	 76, // Brute
+	107, // Malignus
 ];
 
 /** Map object tileset to dun ids (ObjTypeConv) */
-var objectIdMap = [
-	105,5,
-	123, // DevilutionX
-	108,
-	124, // DevilutionX
-	7,6,8,
-	118,119,120,121,122,138,129, // DevilutionX
-	0, // object ID 52
-	145,146, // DevilutionX
-	0, // object ID 88
-	14,
-	0, // object ID 64
-	15,
-	0, // object ID 61
-	16,
-	0, // object ID 91
-	0, // object ID 65
-	0, // object ID 87
-	19,21,77,
-	0, // object ID 68
-	80,
-	137, // DevilutionX
-	83,
-	0, // object ID 70
-	0, // object ID 97
-	2,3,4,
-	136,127, // DevilutionX
-	30,
-	133, // DevilutionX
-	9,
-	139,140,141,142,143,144, // DevilutionX
-	1,
-	116,131,147, // DevilutionX
-	36,37,
-	134,128, // DevilutionX
-	112,65,91,
-	130,113,132,117, // DevilutionX
-	38,39,51,135,70,71,72,73,74,75,76,
-	53,54,55,56,57,58,59,
-	0, // object ID 56
-	109,
-	125,126, // DevilutionX
-	111,110,
-	115,114, // DevilutionX
+var objectIdToTileId = [
+	43, // OBJ_L1LIGHT, unusable as 0 is also means no-object
+	50, // OBJ_LEVER,
+	36, // OBJ_CRUX1,
+	37, // OBJ_CRUX2,
+	38, // OBJ_CRUX3,
+	 1, // OBJ_ANGEL,
+	 6, // OBJ_BANNERL,
+	 5, // OBJ_BANNERM,
+	 7, // OBJ_BANNERR,
+	-1, -1, -1, -1, -1, // Unused
+	19, // OBJ_BOOK2L,
+	21, // OBJ_BOOK2R,
+	23, // OBJ_BCROSS,
+	-1, // Unused
+	-1, // OBJ_CANDLE1, but no graphics
+	27, // OBJ_CANDLE2
+	-1, // OBJ_CANDLEO, but no graphics
+	28, // OBJ_CAULDRON
+	-1, -1, -1, -1, -1, -1, -1, -1, // Unused
+	41, // OBJ_FLAMEHOLE
+	-1, -1, -1, -1, -1, // Unused
+	54, // OBJ_MCIRCLE1,
+	55, // OBJ_MCIRCLE2,
+	65, // OBJ_SKFIRE,
+	66, // OBJ_SKPILE,
+	-1, -1, -1, -1, -1, // Found in sector2s.dun, referenced as SKSTICK1-5, but no graphics
+	-1, -1, -1, -1, -1, -1, // Unused
+	67, // OBJ_SWITCHSKL
+	-1, // Probably OBJ_SWITCHSKR, found in diab3b.dun where upper OBJ_SWITCHSKL is in diab3a.dun
+	76, // OBJ_TRAPL,
+	77, // OBJ_TRAPR,
+	78, // OBJ_TORTURE1,
+	79, // OBJ_TORTURE2,
+	80, // OBJ_TORTURE3,
+	81, // OBJ_TORTURE4,
+	82, // OBJ_TORTURE5,
+	-1, -1, -1, -1, // Unused
+	-1, // Found in sector2s.dun
+	59, // OBJ_NUDEW2R
+	-1, -1, -1, -1, // Unused
+	69, // OBJ_TNUDEM1
+	70, // OBJ_TNUDEM2
+	71, // OBJ_TNUDEM3
+	72, // OBJ_TNUDEM4
+	73, // OBJ_TNUDEW1
+	74, // OBJ_TNUDEW2
+	75, // OBJ_TNUDEW3
+	29, // OBJ_CHEST1,
+	29, // OBJ_CHEST1,
+	29, // OBJ_CHEST1,
+	31, // OBJ_CHEST2,
+	31, // OBJ_CHEST2,
+	31, // OBJ_CHEST2,
+	33, // OBJ_CHEST3,
+	33, // OBJ_CHEST3,
+	33, // OBJ_CHEST3,
+	-1, -1, -1, -1, -1, // Unused
+	60, // OBJ_PEDISTAL
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // Unused
+	 0, // OBJ_ALTBOY
+	-1, // Generic torch found in blood1.dun and blood3.dun instead of OBJ_TORCHL/R from blood2.dun, but not in code
+	-1, // Found in vile3.dun
+	 3, // OBJ_WARARMOR,
+	84, // OBJ_WARWEAP,
+	88, // OBJ_TORCHR2,
+	87, // OBJ_TORCHL2,
+	58, // OBJ_MUSHPATCH,
 ];
 
 /**
@@ -255,35 +378,85 @@ function applyTransparancy(width, height, obj) {
 			polygon[i].y += obj.y;
 		}
 	} else {
-		console.log("unsupported transparancy shape on object");
+		tiled.alert("Rectangles and polygons are supported for transparancy");
 		return;
 	}
 
 	for (var y = 0; y < height; y++) {
 		for (var x = 0; x < width; x++) {
-			if (inside(x, y, polygon)) {
-				trans[x][y] = obj.id;
+			if (isInside(x, y, polygon)) {
+				if (parseInt(obj.name) > 1) {
+					trans[x][y] = parseInt(obj.name);
+				} else {
+					trans[x][y] = 1;
+				}
 			}
 		}
 	}
+}
+
+function findTransRow(view, xStart, y, dunWidth, offset, matchId) {
+	var width = 0;
+	for (var x = xStart; x < dunWidth; x++) {
+		var transId = view.getInt16(2 * offset++, true);
+		if (transId != matchId || trans[x][y]) {
+			break;
+		}
+		width++;
+	}
+
+	return width;
+}
+
+function findTrangsRectangle(view, xStart, yStart, dunWidth, dunHeight, offset, matchId) {
+	var width = findTransRow(view, xStart, yStart, dunWidth, offset, matchId);
+
+	var height = 0;
+	for (var y = yStart; y < dunHeight; y++) {
+		if (width != findTransRow(view, xStart, y, dunWidth, offset, matchId)) {
+			break;
+		}
+		for (var x = xStart; x < width + xStart; x++) {
+			trans[x][y] = matchId; // Mark row as mapped
+		}
+		height++;
+		offset += dunWidth;
+	}
+
+	var object = new MapObject();
+	if (matchId != 1) {
+		object.name = matchId.toString();
+	}
+	object.shape = MapObject.Rectangle;
+
+	object.x = xStart * 32;
+	object.y = yStart * 32;
+	object.width = width * 32;
+	object.height = height * 32;
+
+	return object;
 }
 
 /**
  * Check if a cordinate is inside a polygon
  * @see http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
  */
-function inside(x, y, polygon) {
-    var inside = false;
-    for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        var xi = polygon[i].x / 32, yi = polygon[i].y / 32 + 1;
-        var xj = polygon[j].x / 32, yj = polygon[j].y / 32 + 1;
+function isInside(x, y, polygon) {
+	/// Shift cordinate to center of tile
+	x += 0.5;
+	y += 0.5;
 
-        var intersect = ((yi > y) != (yj > y))
-            && (x <= (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
-    }
+	var inside = false;
+	for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+		var xi = polygon[i].x / 32, yi = polygon[i].y / 32;
+		var xj = polygon[j].x / 32, yj = polygon[j].y / 32;
 
-    return inside;
+		var intersect = ((yi > y) != (yj > y))
+			&& (x <= (xj - xi) * (y - yi) / (yj - yi) + xi);
+		if (intersect) inside = !inside;
+	}
+
+	return inside;
 };
 
 tiled.registerMapFormat("dun", dunMapFormat)
