@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="isometric" renderorder="right-down" width="22" height="35" tilewidth="128" tileheight="64" infinite="0" nextlayerid="478" nextobjectid="536">
+<map version="1.2" tiledversion="1.3.4" orientation="isometric" renderorder="right-down" width="22" height="35" tilewidth="128" tileheight="64" infinite="0" nextlayerid="479" nextobjectid="536">
  <tileset firstgid="1" source="tilesets/cathedral_mega.tsx"/>
  <tileset firstgid="209" source="tilesets/objects.tsx"/>
  <tileset firstgid="300" source="tilesets/monsters.tsx"/>
@@ -42,7 +42,7 @@
 22,22,22,22,22,22,22,22,22,24,24,24,24,24,24,24,24,24,24,20,22,22
 </data>
  </layer>
- <objectgroup id="2" name="object">
+ <objectgroup id="2" name="Objects">
   <object id="84" gid="297" x="960" y="576" width="128" height="128"/>
   <object id="87" gid="297" x="1152" y="800" width="128" height="128"/>
   <object id="89" gid="298" x="864" y="1024" width="128" height="128"/>
