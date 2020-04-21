@@ -33,6 +33,15 @@ var dunMapFormat = {
 			}
 			map.addTileset(tiled.openAssets[t]);
 		}
+		if (!mainTileset) {
+			tiled.alert("You must have the dungion tilset open or no tiles will be loaded");
+		}
+		if (!monsterTileset) {
+			tiled.alert("You must have the monster tilset open or no monsters will be loaded");
+		}
+		if (!objectTileset) {
+			tiled.alert("You must have the monster tilset open or no objects will be loaded");
+		}
 
 		layer = new TileLayer("Tile Layer 1");
 		layer.width = map.width;
