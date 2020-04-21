@@ -6,8 +6,8 @@ var dunMapFormat = {
 
 	read: function(fileName) {
 		var file = new BinaryFile(fileName, BinaryFile.ReadOnly);
-		const buffer = file.readAll();
-		const view = new DataView(buffer);
+		var buffer = file.readAll();
+		var view = new DataView(buffer);
 		var i = 0; // uint16 offset
 
 		var map = new TileMap();
@@ -132,17 +132,17 @@ var dunMapFormat = {
 		}
 
 		// Tracking what has been converted in to larger rectangles
-		trans = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
+		trans = init2DArray(dunWidth, dunHeight);
 
 		// Transparancy
 		var transparancy = new ObjectGroup("transparancy");
 		for (var y = 0; y < dunHeight; y++) {
 			for (var x = 0; x < dunWidth; x++) {
-				var objectId = view.getInt16(2 * i++, true);
-				if (!objectId || trans[x][y]) {
+				var roomId = view.getInt16(2 * i++, true);
+				if (!roomId || trans[x][y]) {
 					continue;
 				}
-				var rect = findTrangsRectangle(view, x, y, dunWidth, dunHeight, i - 1, objectId);
+				var rect = findTransRectangle(view, x, y, dunWidth, dunHeight, i - 1, roomId);
 				transparancy.addObject(rect);
 			}
 		}
@@ -157,10 +157,10 @@ var dunMapFormat = {
 		var dunHeight = map.height * 2;
 
 		// Init .dun layer arrays
-		var tileIDs = Array(map.width).fill().map(()=>Array(map.height).fill(0));
-		var monstIds = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
-		var objIds = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
-		trans = Array(dunWidth).fill().map(()=>Array(dunHeight).fill(0));
+		var tileIDs = init2DArray(map.width, map.height);
+		var monstIds = init2DArray(dunWidth, dunHeight);
+		var objIds = init2DArray(dunWidth, dunHeight);
+		trans = init2DArray(dunWidth, dunHeight);
 
 		// Combine layers
 		for (var i = 0; i < map.layerCount; i++) {
@@ -187,7 +187,7 @@ var dunMapFormat = {
 						monstIds[x][y] = mi + 1;
 					} else if (obj.tile && obj.tile.tileset.name == "objects") {
 						var oi = objectIdToTileId.indexOf(obj.tile.id);
-						if (oi == -1 || oi == 0) { // object ids are saved as +1
+						if (oi == -1 || oi == 0) { // Format quirk, object ids are not saved as +1
 							tiled.alert("Unmapped object tile: " + obj.tile.id);
 							continue;
 						}
@@ -200,7 +200,7 @@ var dunMapFormat = {
 		}
 
 		// Reserve buffer in size of file
-		const buffer = new ArrayBuffer(2 * ( // uint16
+		var buffer = new ArrayBuffer(2 * ( // uint16
 			1 + 1 // width  and height
 			+ map.width * map.height // tiles
 			+ dunWidth * dunHeight // unused
@@ -209,7 +209,7 @@ var dunMapFormat = {
 			+ dunWidth * dunHeight // transparancy
 		));
 
-		const view = new DataView(buffer);
+		var view = new DataView(buffer);
 		var i = 0; // uint offset
 
 		 // width
@@ -369,6 +369,18 @@ var objectIdToTileId = [
 ];
 
 /**
+ * Create and fill a 2D array with 0s
+ */
+function init2DArray(dunWidth, dunHeight) {
+	var trans = new Array(dunWidth);
+	for (var x = 0; x < dunWidth; x++) {
+		trans[x] = new Array(dunHeight).map(function(){return 0;});
+	}
+
+	return trans;
+}
+
+/**
  * Mark dPieces with in transparent areas with the transparancy id
  */
 function applyTransparancy(width, height, obj) {
@@ -387,7 +399,7 @@ function applyTransparancy(width, height, obj) {
 			polygon[i].y += obj.y;
 		}
 	} else {
-		tiled.alert("Rectangles and polygons are supported for transparancy");
+		tiled.alert("Only rectangles and polygons are supported for transparancy");
 		return;
 	}
 
@@ -407,8 +419,8 @@ function applyTransparancy(width, height, obj) {
 function findTransRow(view, xStart, y, dunWidth, offset, matchId) {
 	var width = 0;
 	for (var x = xStart; x < dunWidth; x++) {
-		var transId = view.getInt16(2 * offset++, true);
-		if (transId != matchId || trans[x][y]) {
+		var roomId = view.getInt16(2 * offset++, true);
+		if (roomId != matchId || trans[x][y]) {
 			break;
 		}
 		width++;
@@ -417,24 +429,24 @@ function findTransRow(view, xStart, y, dunWidth, offset, matchId) {
 	return width;
 }
 
-function findTrangsRectangle(view, xStart, yStart, dunWidth, dunHeight, offset, matchId) {
-	var width = findTransRow(view, xStart, yStart, dunWidth, offset, matchId);
+function findTransRectangle(view, xStart, yStart, dunWidth, dunHeight, offset, roomId) {
+	var width = findTransRow(view, xStart, yStart, dunWidth, offset, roomId);
 
 	var height = 0;
 	for (var y = yStart; y < dunHeight; y++) {
-		if (width != findTransRow(view, xStart, y, dunWidth, offset, matchId)) {
+		if (width != findTransRow(view, xStart, y, dunWidth, offset, roomId)) {
 			break;
 		}
 		for (var x = xStart; x < width + xStart; x++) {
-			trans[x][y] = matchId; // Mark row as mapped
+			trans[x][y] = roomId; // Mark row as mapped
 		}
 		height++;
 		offset += dunWidth;
 	}
 
 	var object = new MapObject();
-	if (matchId != 1) {
-		object.name = matchId.toString();
+	if (roomId != 1) {
+		object.name = roomId.toString();
 	}
 	object.shape = MapObject.Rectangle;
 
