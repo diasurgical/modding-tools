@@ -60,7 +60,7 @@
   <object id="534" gid="399" x="512" y="224" width="160" height="160"/>
   <object id="535" gid="399" x="288" y="384" width="160" height="160"/>
  </objectgroup>
- <objectgroup id="3" name="transparancy" visible="0">
+ <objectgroup id="3" name="Transparency">
   <object id="47" type="transparancy" x="416" y="352">
    <polygon points="0,0 0,704 64,704 64,640 96,640 96,704 320,704 320,640 384,640 384,512 448,512 448,0"/>
   </object>
@@ -73,10 +73,5 @@
   <object id="61" type="transparancy" x="96" y="1504">
    <polygon points="0,0 128,0 128,-128 640,-128 640,256 0,256"/>
   </object>
-  <object id="347" type="transparancy" x="0" y="-352">
-   <polygon points="-32,0 -32,64 32,64 32,512 -416,512 -416,0"/>
-  </object>
-  <object id="526" type="transparancy" x="32" y="-288" width="672" height="64"/>
-  <object id="527" x="800" y="-288" width="64" height="640"/>
  </objectgroup>
 </map>

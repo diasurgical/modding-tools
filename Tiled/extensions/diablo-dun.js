@@ -135,7 +135,7 @@ var dunMapFormat = {
 		trans = init2DArray(dunWidth, dunHeight);
 
 		// Transparancy
-		var transparancy = new ObjectGroup("transparancy");
+		var transparancy = new ObjectGroup("Transparency");
 		for (var y = 0; y < dunHeight; y++) {
 			for (var x = 0; x < dunWidth; x++) {
 				var roomId = view.getInt16(2 * i++, true);
@@ -192,7 +192,7 @@ var dunMapFormat = {
 							continue;
 						}
 						objIds[x][y] = oi;
-					} else if (!obj.tile && layer.name == "transparancy") {
+					} else if (!obj.tile && layer.name == "Transparency") {
 						applyTransparancy(dunWidth, dunHeight, obj);
 					}
 				}
