@@ -12,4 +12,5 @@ Please download the following file and extract it to the 'util' folder. It conta
 for the scripts to stitch togeather the individual images: https://sergi4ua.github.io/cellar/montage.zip
 
 Then run convert_mega_tilesets.bat to generate the PNG tilesets needed for mapping with [Tiled](https://www.mapeditor.org/)
+
 **Note:** Make sure you running this scripts in a folder where _dump_ exists and contains all the required data.
