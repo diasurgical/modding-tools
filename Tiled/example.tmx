@@ -36,29 +36,29 @@
 </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="84" gid="297" x="448" y="128" width="128" height="128"/>
-  <object id="87" gid="297" x="640" y="352" width="128" height="128"/>
-  <object id="89" gid="298" x="352" y="576" width="128" height="128"/>
-  <object id="90" gid="298" x="256" y="576" width="128" height="128"/>
-  <object id="91" gid="245" x="224" y="160" width="128" height="128"/>
-  <object id="92" gid="247" x="224" y="288" width="128" height="128"/>
-  <object id="93" gid="247" x="224" y="416" width="128" height="128"/>
-  <object id="94" gid="223" x="384" y="224" width="128" height="128"/>
-  <object id="96" gid="221" x="576" y="1088" width="128" height="128"/>
-  <object id="101" gid="221" x="128" y="1536" width="128" height="128"/>
-  <object id="102" gid="221" x="192" y="1536" width="128" height="128"/>
-  <object id="103" gid="217" x="576" y="1152" width="128" height="128"/>
-  <object id="104" gid="235" x="192" y="1632" width="128" height="128"/>
-  <object id="105" gid="248" x="672" y="544" width="128" height="128"/>
-  <object id="106" gid="261" x="256" y="1408" width="128" height="128"/>
-  <object id="107" gid="296" x="416" y="704" width="128" height="128"/>
-  <object id="109" gid="296" x="416" y="896" width="128" height="128"/>
-  <object id="110" gid="271" x="288" y="224" width="128" height="128"/>
-  <object id="111" gid="285" x="608" y="1216" width="128" height="128"/>
-  <object id="114" gid="275" x="224" y="480" width="128" height="128"/>
-  <object id="533" gid="399" x="288" y="192" width="160" height="160"/>
-  <object id="534" gid="399" x="512" y="224" width="160" height="160"/>
-  <object id="535" gid="399" x="288" y="384" width="160" height="160"/>
+  <object id="84" gid="243" x="416" y="96" width="128" height="128"/>
+  <object id="87" gid="243" x="608" y="352" width="128" height="128"/>
+  <object id="89" gid="244" x="352" y="576" width="128" height="128"/>
+  <object id="90" gid="244" x="256" y="576" width="128" height="128"/>
+  <object id="91" gid="248" x="224" y="160" width="128" height="128"/>
+  <object id="92" gid="248" x="224" y="288" width="128" height="128"/>
+  <object id="93" gid="248" x="224" y="416" width="128" height="128"/>
+  <object id="94" gid="232" x="384" y="224" width="128" height="128"/>
+  <object id="96" gid="220" x="576" y="1088" width="128" height="128"/>
+  <object id="101" gid="220" x="128" y="1536" width="128" height="128"/>
+  <object id="102" gid="220" x="192" y="1536" width="128" height="128"/>
+  <object id="103" gid="215" x="576" y="1152" width="128" height="128"/>
+  <object id="104" gid="241" x="192" y="1632" width="128" height="128"/>
+  <object id="105" gid="223" x="672" y="544" width="128" height="128"/>
+  <object id="106" gid="228" x="256" y="1408" width="128" height="128"/>
+  <object id="107" gid="242" x="416" y="704" width="128" height="128"/>
+  <object id="109" gid="242" x="416" y="896" width="128" height="128"/>
+  <object id="110" gid="255" x="288" y="224" width="128" height="128"/>
+  <object id="111" gid="236" x="608" y="1216" width="128" height="128"/>
+  <object id="114" gid="247" x="224" y="480" width="128" height="128"/>
+  <object id="569" gid="399" x="288" y="192" width="160" height="160"/>
+  <object id="570" gid="399" x="512" y="224" width="160" height="160"/>
+  <object id="571" gid="399" x="288" y="384" width="160" height="160"/>
  </objectgroup>
  <objectgroup id="3" name="Transparency">
   <object id="47" type="transparancy" x="416" y="352">

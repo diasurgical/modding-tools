@@ -295,77 +295,132 @@ var monsterIdToTileId = [
 	 -1, -1,
 	 76, // Brute
 	107, // Malignus
+	 -1, // Hellfire: Hellboar
+	 -1, // Hellfire: Stinger
+	 -1, // Hellfire: Psychorb
+	 -1, // Hellfire: Arachnon
+	 -1, // Hellfire: Felltwin
+	 -1, // Hellfire: Hork Spawn
+	 -1, // Hellfire: Stinger (duplicate)
+	 -1, // Hellfire: Psychorb (duplicate)
+	 -1, // Hellfire: Arachnon (duplicate)
+	 -1, // Hellfire: Lashworm
+	 -1, // Hellfire: Torchant
+	 -1, // Hellfire: Hork Demon
+	 -1, // Hellfire: Hell Bug
+	 -1, // Hellfire: Gravedigger
+	 -1, // Hellfire: Tomb Rat
+	 -1, // Hellfire: Firebat
+	 -1, // Hellfire: Skullwing
+	 -1, // Hellfire: Lich
+	 -1, // Hellfire: Crypt Demon
+	 -1, // Hellfire: Firebat (duplicate)
+	 -1, // Hellfire: Skullwing (duplicate)
+	 -1, // Hellfire: Lich (duplicate)
+	 -1, // Hellfire: Biclops
+	 -1, // Hellfire: Flesh Thing
+	 -1, // Hellfire: Reaper
+	 -1, // Hellfire: Na-Krul
+	 51, // The Butcher
+	 28, // Invisible Lord
+	 33, // Blightstone the Weak
 ];
 
 /** Map object tileset to dun ids (ObjTypeConv) */
 var objectIdToTileId = [
-	43, // OBJ_L1LIGHT, unusable as 0 is also means no-object
-	50, // OBJ_LEVER,
-	36, // OBJ_CRUX1,
-	37, // OBJ_CRUX2,
-	38, // OBJ_CRUX3,
-	 1, // OBJ_ANGEL,
-	 6, // OBJ_BANNERL,
-	 5, // OBJ_BANNERM,
-	 7, // OBJ_BANNERR,
+	-1, // unusable as 0 is also means no-object
+	43, // OBJ_LEVER,
+	40, // OBJ_CRUX1,
+	41, // OBJ_CRUX2,
+	39, // OBJ_CRUX3,
+	51, // OBJ_ANGEL,
+	54, // OBJ_BANNERL,
+	53, // OBJ_BANNERM,
+	52, // OBJ_BANNERR,
 	-1, -1, -1, -1, -1, // Unused
-	19, // OBJ_BOOK2L,
-	21, // OBJ_BOOK2R,
-	23, // OBJ_BCROSS,
+	89, // Ancient Tome / Book of Vilenes, depending on level
+	90, // Mythical Book (Chamber of bones)
+	31, // Burning cross,
 	-1, // Unused
-	-1, // OBJ_CANDLE1, but no graphics
-	27, // OBJ_CANDLE2
+	88, // trigger AddObjLight but not object graphics
+	32, // OBJ_CANDLE2
 	-1, // OBJ_CANDLEO, but no graphics
-	28, // OBJ_CAULDRON
+	22, // OBJ_CAULDRON
 	-1, -1, -1, -1, -1, -1, -1, -1, // Unused
-	41, // OBJ_FLAMEHOLE
+	29, // OBJ_FLAMEHOLE
 	-1, -1, -1, -1, -1, // Unused
-	54, // OBJ_MCIRCLE1,
-	55, // OBJ_MCIRCLE2,
-	65, // OBJ_SKFIRE,
-	66, // OBJ_SKPILE,
+	44, // OBJ_MCIRCLE1,
+	45, // OBJ_MCIRCLE2,
+	37, // OBJ_SKFIRE,
+	38, // OBJ_SKPILE,
 	-1, -1, -1, -1, -1, // Found in sector2s.dun, referenced as SKSTICK1-5, but no graphics
 	-1, -1, -1, -1, -1, -1, // Unused
-	67, // OBJ_SWITCHSKL
+	42, // OBJ_SWITCHSKL
 	-1, // Probably OBJ_SWITCHSKR, found in diab3b.dun where upper OBJ_SWITCHSKL is in diab3a.dun
-	76, // OBJ_TRAPL,
-	77, // OBJ_TRAPR,
-	78, // OBJ_TORTURE1,
-	79, // OBJ_TORTURE2,
-	80, // OBJ_TORTURE3,
-	81, // OBJ_TORTURE4,
-	82, // OBJ_TORTURE5,
+	27, // OBJ_TRAPL,
+	28, // OBJ_TRAPR,
+	63, // OBJ_TORTURE1,
+	64, // OBJ_TORTURE2,
+	65, // OBJ_TORTURE3,
+	66, // OBJ_TORTURE4,
+	67, // OBJ_TORTURE5,
 	-1, -1, -1, -1, // Unused
 	-1, // Found in sector2s.dun
-	59, // OBJ_NUDEW2R
+	56, // OBJ_NUDEW2R
 	-1, -1, -1, -1, // Unused
-	69, // OBJ_TNUDEM1
-	70, // OBJ_TNUDEM2
-	71, // OBJ_TNUDEM3
-	72, // OBJ_TNUDEM4
-	73, // OBJ_TNUDEW1
-	74, // OBJ_TNUDEW2
-	75, // OBJ_TNUDEW3
-	29, // OBJ_CHEST1,
-	29, // OBJ_CHEST1,
-	29, // OBJ_CHEST1,
-	31, // OBJ_CHEST2,
-	31, // OBJ_CHEST2,
-	31, // OBJ_CHEST2,
-	33, // OBJ_CHEST3,
-	33, // OBJ_CHEST3,
-	33, // OBJ_CHEST3,
+	57, // OBJ_TNUDEM1
+	55, // OBJ_TNUDEM2
+	58, // OBJ_TNUDEM3
+	59, // OBJ_TNUDEM4
+	60, // OBJ_TNUDEW1
+	61, // OBJ_TNUDEW2
+	62, // OBJ_TNUDEW3
+	 0, // OBJ_CHEST1,
+	 0, // OBJ_CHEST1,
+	 0, // OBJ_CHEST1,
+	 2, // OBJ_CHEST2,
+	 2, // OBJ_CHEST2,
+	 2, // OBJ_CHEST2,
+	 4, // OBJ_CHEST3,
+	 4, // OBJ_CHEST3,
+	 4, // OBJ_CHEST3,
 	-1, -1, -1, -1, -1, // Unused
-	60, // OBJ_PEDISTAL
+	48, // OBJ_PEDISTAL
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // Unused
-	 0, // OBJ_ALTBOY
+	50, // OBJ_ALTBOY
 	-1, // Generic torch found in blood1.dun and blood3.dun instead of OBJ_TORCHL/R from blood2.dun, but not in code
 	-1, // Found in vile3.dun
-	 3, // OBJ_WARARMOR,
-	84, // OBJ_WARWEAP,
-	88, // OBJ_TORCHR2,
-	87, // OBJ_TORCHL2,
-	58, // OBJ_MUSHPATCH,
+	15, // OBJ_WARARMOR,
+	17, // OBJ_WARWEAP,
+	34, // OBJ_TORCHR2,
+	33, // OBJ_TORCHL2,
+	49, // OBJ_MUSHPATCH,
+	46, // OBJ_STAND,
+	36, // OBJ_TORCHL,
+	35, // OBJ_TORCHR,
+	30, // Leaver (controls flame trap),
+	13, // OBJ_SARC,
+	 6, // OBJ_BARREL,
+	 7, // OBJ_BARRELEX,
+	10, // OBJ_BOOKSHELF,
+	 9, // OBJ_BOOKCASEL,
+	11, // OBJ_BOOKCASER,
+	16, // OBJ_ARMORSTANDN,
+	18, // OBJ_WEAPONRACKN,
+	23, // OBJ_BLOODFTN,
+	24, // OBJ_PURIFYINGFTN,
+	19, // OBJ_SHRINEL,
+	20, // OBJ_SHRINER,
+	21, // OBJ_GOATSHRINE,
+	26, // OBJ_MURKYFTN,
+	25, // OBJ_TEARFTN,
+	14, // OBJ_DECAP,
+	 1, // OBJ_TCHEST1,
+	 3, // OBJ_TCHEST2,
+	 5, // OBJ_TCHEST3,
+	47, // OBJ_LAZSTAND,
+	 8, // OBJ_BOOKSTAND,
+	12, // OBJ_BOOKSHELFR,
 ];
 
 /**
