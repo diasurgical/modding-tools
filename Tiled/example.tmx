@@ -62,16 +62,16 @@
  </objectgroup>
  <objectgroup id="3" name="Transparency">
   <object id="47" type="transparancy" x="416" y="352">
-   <polygon points="0,0 0,704 64,704 64,640 96,640 96,704 320,704 320,640 384,640 384,512 448,512 448,0"/>
+   <polygon points="0,0 0,704 96,704 96,640 128,640 128,704 352,704 352,672 416,672 416,544 480,544 480,0"/>
   </object>
   <object id="48" type="transparancy" x="160" y="96">
-   <polygon points="0,0 448,0 448,192 384,192 384,256 256,256 256,448 192,448 192,512 0,512"/>
+   <polygon points="0,0 480,0 480,224 416,224 416,256 256,256 256,480 224,480 224,544 0,544"/>
   </object>
   <object id="60" type="transparancy" x="416" y="1056">
-   <polygon points="128,0 320,0 320,320 192,320 192,96 160,96 160,64 128,64"/>
+   <polygon points="128,0 352,0 352,320 192,320 192,96 160,96 160,160 128,160"/>
   </object>
-  <object id="61" type="transparancy" x="96" y="1504">
-   <polygon points="0,0 128,0 128,-128 640,-128 640,256 0,256"/>
+  <object id="61" type="transparancy" x="96" y="1514.67">
+   <polygon points="0,-10.6667 128,-10.6667 128,-138.667 672,-138.667 672,277.333 0,277.333"/>
   </object>
  </objectgroup>
 </map>
