@@ -1,3 +1,5 @@
+![Discord Channel](https://avatars3.githubusercontent.com/u/1965106?s=16&v=4) [Discord Chat Channel](https://discord.gg/YQKCAYQ)
+
 # Diablo 1 modding tools
 
 This is a set of tools for modding Diablo 1, and more specificually DevilutionX.
