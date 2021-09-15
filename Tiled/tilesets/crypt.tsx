@@ -2,6 +2,14 @@
 <tileset version="1.5" tiledversion="1.7.2" name="Crypt" tilewidth="128" tileheight="192" tilecount="224" columns="8">
  <grid orientation="isometric" width="128" height="192"/>
  <image source="l5_til.png" width="1024" height="5376"/>
+ <tile id="189" probability="0.1"/>
+ <tile id="190" probability="0.1"/>
+ <tile id="192" probability="0.1"/>
+ <tile id="193" probability="0.1"/>
+ <tile id="194" probability="0.1"/>
+ <tile id="195" probability="0.1"/>
+ <tile id="196" probability="0.1"/>
+ <tile id="197" probability="0.1"/>
  <wangsets>
   <wangset name="Terrains" type="corner" tile="-1">
    <wangcolor name="floor" color="#ff0000" tile="12" probability="1"/>
@@ -10,8 +18,6 @@
    <wangtile tileid="1" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="2" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="3" wangid="0,2,0,1,0,2,0,2"/>
-   <wangtile tileid="5" wangid="0,1,0,1,0,2,0,2"/>
-   <wangtile tileid="6" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="12" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="14" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="15" wangid="0,1,0,1,0,1,0,2"/>
@@ -38,8 +44,6 @@
    <wangtile tileid="112" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="113" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="114" wangid="0,2,0,1,0,2,0,2"/>
-   <wangtile tileid="116" wangid="0,1,0,1,0,2,0,2"/>
-   <wangtile tileid="117" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="123" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="125" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="126" wangid="0,1,0,1,0,1,0,2"/>
@@ -48,8 +52,6 @@
    <wangtile tileid="129" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="130" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="131" wangid="0,2,0,1,0,2,0,2"/>
-   <wangtile tileid="133" wangid="0,1,0,1,0,2,0,2"/>
-   <wangtile tileid="134" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="140" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="142" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="143" wangid="0,1,0,1,0,1,0,2"/>
@@ -59,7 +61,6 @@
    <wangtile tileid="147" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="148" wangid="0,2,0,1,0,2,0,2"/>
    <wangtile tileid="150" wangid="0,1,0,1,0,2,0,2"/>
-   <wangtile tileid="151" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="157" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="160" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="161" wangid="0,1,0,1,0,1,0,2"/>
