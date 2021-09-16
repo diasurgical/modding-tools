@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="tristram" tilewidth="128" tileheight="288" tilecount="352" columns="32">
+<tileset version="1.5" tiledversion="1.7.2" name="tristram" tilewidth="128" tileheight="288" tilecount="376" columns="8">
  <grid orientation="isometric" width="128" height="288"/>
- <image source="tristram_mega_special.png" width="4096" height="3168"/>
+ <image source="town_til.png" width="1024" height="13536"/>
  <tile id="8" probability="0.3"/>
  <tile id="9" probability="0.3"/>
  <tile id="10" probability="0.3"/>
