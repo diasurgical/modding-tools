@@ -31,8 +31,6 @@
    <wangtile tileid="54" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="55" wangid="0,2,0,1,0,1,0,1"/>
    <wangtile tileid="56" wangid="0,1,0,1,0,1,0,2"/>
-   <wangtile tileid="57" wangid="0,1,0,1,0,1,0,1"/>
-   <wangtile tileid="59" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="60" wangid="0,1,0,1,0,2,0,2"/>
    <wangtile tileid="61" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="62" wangid="0,1,0,1,0,2,0,2"/>
