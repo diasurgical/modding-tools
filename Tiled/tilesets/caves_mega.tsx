@@ -3,7 +3,7 @@
  <grid orientation="isometric" width="128" height="192"/>
  <image source="caves_mega.png" width="2048" height="1920"/>
  <wangsets>
-  <wangset name="Terrains" type="corner" tile="-1">
+  <wangset name="Terrains" type="corner" tile="22">
    <wangcolor name="floor" color="#aa5500" tile="6" probability="1"/>
    <wangcolor name="lava" color="#ff5500" tile="32" probability="1"/>
    <wangcolor name="dirt" color="#000000" tile="7" probability="1"/>

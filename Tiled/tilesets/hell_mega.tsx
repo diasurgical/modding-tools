@@ -11,9 +11,9 @@
  <tile id="95" probability="0.05"/>
  <tile id="96" probability="0.1"/>
  <wangsets>
-  <wangset name="Terrains" type="corner" tile="-1">
-   <wangcolor name="floor" color="#ff0000" tile="5" probability="1"/>
-   <wangcolor name="blood" color="#00ff00" tile="29" probability="1"/>
+  <wangset name="Terrains" type="corner" tile="8">
+   <wangcolor name="floor" color="#00007f" tile="5" probability="1"/>
+   <wangcolor name="blood" color="#aa0000" tile="29" probability="1"/>
    <wangtile tileid="0" wangid="0,1,0,1,0,2,0,2"/>
    <wangtile tileid="1" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="5" wangid="0,1,0,1,0,1,0,1"/>
