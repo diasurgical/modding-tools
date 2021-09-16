@@ -12,7 +12,7 @@
  <tile id="136" probability="2"/>
  <tile id="137" probability="3"/>
  <wangsets>
-  <wangset name="Terrains" type="corner" tile="3">
+  <wangset name="Cathedral" type="corner" tile="3">
    <wangcolor name="floor" color="#aaaa7f" tile="12" probability="1"/>
    <wangcolor name="dirt" color="#000000" tile="21" probability="1"/>
    <wangtile tileid="0" wangid="0,1,0,1,0,2,0,2"/>

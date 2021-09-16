@@ -21,7 +21,7 @@
  <tile id="148" probability="0.1"/>
  <tile id="149" probability="0.1"/>
  <wangsets>
-  <wangset name="Terrains" type="corner" tile="6">
+  <wangset name="Hive" type="corner" tile="134">
    <wangcolor name="floor" color="#7d4f00" tile="6" probability="1"/>
    <wangcolor name="acid" color="#00ff00" tile="133" probability="1"/>
    <wangcolor name="dirt" color="#aa0000" tile="7" probability="1"/>
@@ -106,7 +106,7 @@
    <wangtile tileid="160" wangid="0,3,0,1,0,1,0,3"/>
    <wangtile tileid="161" wangid="0,3,0,3,0,3,0,3"/>
   </wangset>
-  <wangset name="River" type="edge" tile="116">
+  <wangset name="Acid river" type="edge" tile="116">
    <wangcolor name="Ground" color="#ff0000" tile="6" probability="1"/>
    <wangcolor name="River" color="#00ff00" tile="116" probability="1"/>
    <wangtile tileid="6" wangid="1,0,1,0,1,0,1,0"/>
