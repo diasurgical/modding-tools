@@ -95,7 +95,7 @@
   <wangset name="Cave fence" type="mixed" tile="129">
    <wangcolor name="floor" color="#aa5500" tile="6" probability="1"/>
    <wangcolor name="dirt" color="#000000" tile="7" probability="1"/>
-   <wangcolor name="fense" color="#0000ff" tile="-1" probability="1"/>
+   <wangcolor name="fense" color="#0000ff" tile="136" probability="1"/>
    <wangtile tileid="0" wangid="1,1,1,2,2,2,2,2"/>
    <wangtile tileid="1" wangid="1,1,1,2,2,2,1,1"/>
    <wangtile tileid="2" wangid="2,2,2,2,1,1,1,2"/>
@@ -144,6 +144,22 @@
    <wangtile tileid="149" wangid="1,1,3,1,3,1,1,1"/>
    <wangtile tileid="150" wangid="1,1,3,1,3,1,3,1"/>
    <wangtile tileid="151" wangid="3,1,3,1,3,1,1,1"/>
+  </wangset>
+  <wangset name="Lava river" type="edge" tile="15">
+   <wangcolor name="" color="#ff0000" tile="15" probability="1"/>
+   <wangcolor name="" color="#aaaa7f" tile="6" probability="1"/>
+   <wangtile tileid="6" wangid="2,0,2,0,2,0,2,0"/>
+   <wangtile tileid="14" wangid="2,0,1,0,2,0,1,0"/>
+   <wangtile tileid="15" wangid="2,0,1,0,2,0,1,0"/>
+   <wangtile tileid="16" wangid="1,0,2,0,1,0,2,0"/>
+   <wangtile tileid="17" wangid="1,0,2,0,1,0,2,0"/>
+   <wangtile tileid="18" wangid="2,0,1,0,1,0,2,0"/>
+   <wangtile tileid="19" wangid="2,0,2,0,1,0,1,0"/>
+   <wangtile tileid="20" wangid="1,0,1,0,2,0,2,0"/>
+   <wangtile tileid="21" wangid="1,0,2,0,2,0,1,0"/>
+   <wangtile tileid="105" wangid="2,0,2,0,2,0,2,0"/>
+   <wangtile tileid="106" wangid="2,0,2,0,2,0,2,0"/>
+   <wangtile tileid="107" wangid="2,0,2,0,2,0,2,0"/>
   </wangset>
  </wangsets>
 </tileset>
