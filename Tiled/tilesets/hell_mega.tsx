@@ -2,6 +2,14 @@
 <tileset version="1.5" tiledversion="1.7.2" name="hell" tilewidth="128" tileheight="288" tilecount="144" columns="8">
  <grid orientation="isometric" width="128" height="288"/>
  <image source="l4_til.png" width="1024" height="5184"/>
+ <tile id="5" probability="0.2"/>
+ <tile id="48" probability="0.2"/>
+ <tile id="49" probability="0.2"/>
+ <tile id="50" probability="0.2"/>
+ <tile id="54" probability="0.2"/>
+ <tile id="94" probability="0.05"/>
+ <tile id="95" probability="0.05"/>
+ <tile id="96" probability="0.1"/>
  <wangsets>
   <wangset name="Terrains" type="corner" tile="-1">
    <wangcolor name="floor" color="#ff0000" tile="5" probability="1"/>
