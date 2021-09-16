@@ -17,10 +17,13 @@
  <tile id="142" probability="0.1"/>
  <tile id="143" probability="0.1"/>
  <tile id="146" probability="0.1"/>
+ <tile id="147" probability="0.1"/>
+ <tile id="148" probability="0.1"/>
+ <tile id="149" probability="0.1"/>
  <wangsets>
-  <wangset name="Terrains" type="corner" tile="-1">
+  <wangset name="Terrains" type="corner" tile="6">
    <wangcolor name="floor" color="#7d4f00" tile="6" probability="1"/>
-   <wangcolor name="acid" color="#00ff00" tile="32" probability="1"/>
+   <wangcolor name="acid" color="#00ff00" tile="133" probability="1"/>
    <wangcolor name="dirt" color="#aa0000" tile="7" probability="1"/>
    <wangtile tileid="0" wangid="0,1,0,3,0,3,0,3"/>
    <wangtile tileid="1" wangid="0,1,0,3,0,3,0,1"/>
@@ -67,19 +70,14 @@
    <wangtile tileid="92" wangid="0,3,0,1,0,1,0,3"/>
    <wangtile tileid="97" wangid="0,3,0,3,0,3,0,3"/>
    <wangtile tileid="106" wangid="0,1,0,2,0,1,0,1"/>
-   <wangtile tileid="108" wangid="0,2,0,2,0,1,0,1"/>
-   <wangtile tileid="112" wangid="0,1,0,2,0,1,0,1"/>
    <wangtile tileid="114" wangid="0,1,0,1,0,2,0,1"/>
    <wangtile tileid="117" wangid="0,2,0,1,0,2,0,2"/>
-   <wangtile tileid="118" wangid="0,2,0,1,0,1,0,1"/>
+   <wangtile tileid="118" wangid="0,2,0,2,0,1,0,1"/>
    <wangtile tileid="119" wangid="0,1,0,2,0,2,0,1"/>
    <wangtile tileid="120" wangid="0,2,0,1,0,1,0,2"/>
    <wangtile tileid="121" wangid="0,1,0,1,0,2,0,2"/>
    <wangtile tileid="122" wangid="0,1,0,1,0,1,0,2"/>
    <wangtile tileid="124" wangid="0,2,0,2,0,1,0,2"/>
-   <wangtile tileid="127" wangid="0,2,0,2,0,1,0,2"/>
-   <wangtile tileid="128" wangid="0,2,0,1,0,2,0,2"/>
-   <wangtile tileid="129" wangid="0,2,0,2,0,2,0,1"/>
    <wangtile tileid="130" wangid="0,2,0,1,0,1,0,1"/>
    <wangtile tileid="131" wangid="0,2,0,2,0,2,0,1"/>
    <wangtile tileid="132" wangid="0,1,0,2,0,2,0,2"/>
@@ -96,7 +94,7 @@
    <wangtile tileid="148" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="149" wangid="0,1,0,1,0,1,0,1"/>
    <wangtile tileid="150" wangid="0,3,0,3,0,3,0,3"/>
-   <wangtile tileid="151" wangid="0,0,0,0,0,3,0,3"/>
+   <wangtile tileid="151" wangid="0,1,0,1,0,3,0,3"/>
    <wangtile tileid="152" wangid="0,3,0,3,0,3,0,3"/>
    <wangtile tileid="153" wangid="0,3,0,1,0,3,0,3"/>
    <wangtile tileid="154" wangid="0,3,0,1,0,1,0,3"/>
@@ -107,6 +105,37 @@
    <wangtile tileid="159" wangid="0,3,0,1,0,3,0,3"/>
    <wangtile tileid="160" wangid="0,3,0,1,0,1,0,3"/>
    <wangtile tileid="161" wangid="0,3,0,3,0,3,0,3"/>
+  </wangset>
+  <wangset name="River" type="edge" tile="116">
+   <wangcolor name="Ground" color="#ff0000" tile="6" probability="1"/>
+   <wangcolor name="River" color="#00ff00" tile="116" probability="1"/>
+   <wangtile tileid="6" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="28" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="29" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="30" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="31" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="64" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="68" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="102" wangid="1,0,2,0,1,0,2,0"/>
+   <wangtile tileid="103" wangid="1,0,2,0,1,0,2,0"/>
+   <wangtile tileid="104" wangid="2,0,1,0,2,0,1,0"/>
+   <wangtile tileid="105" wangid="2,0,1,0,2,0,1,0"/>
+   <wangtile tileid="107" wangid="2,0,1,0,2,0,1,0"/>
+   <wangtile tileid="108" wangid="1,0,2,0,1,0,1,0"/>
+   <wangtile tileid="110" wangid="2,0,2,0,1,0,1,0"/>
+   <wangtile tileid="111" wangid="2,0,1,0,1,0,2,0"/>
+   <wangtile tileid="112" wangid="1,0,2,0,2,0,1,0"/>
+   <wangtile tileid="113" wangid="1,0,1,0,2,0,2,0"/>
+   <wangtile tileid="115" wangid="1,0,2,0,1,0,2,0"/>
+   <wangtile tileid="116" wangid="2,0,1,0,2,0,1,0"/>
+   <wangtile tileid="140" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="141" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="142" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="143" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="146" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="147" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="148" wangid="1,0,1,0,1,0,1,0"/>
+   <wangtile tileid="149" wangid="1,0,1,0,1,0,1,0"/>
   </wangset>
  </wangsets>
 </tileset>
