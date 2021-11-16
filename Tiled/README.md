@@ -12,11 +12,13 @@ First step is to download and install [Tiled](https://www.mapeditor.org/), we re
 
 Then download [this repository](https://github.com/diasurgical/modding-tools/archive/master.zip).
 
-Next you will need a PNG version of the tile sheets, this can be done using [Open source-ami](https://github.com/sanctuary/opensource-ami). Follow the main usage instructions, then run the `convert_mega_tilesets`, `gen_monsters_tilset` and `gen_objects_tileset` scripts.
+Next you will need a PNG version of the tile sheets, this can be done using [Open source-ami](https://github.com/sanctuary/opensource-ami).
 
-**Note**: for Windows users we provide a helper script in the [windows-x86-scripts folder](https://github.com/diasurgical/modding-tools/tree/master/windows-x86-scripts), this need to be used together with Open source-ami.
+Open each level cel file and export them as a png:
 
-This should should give you the 7 needed PNG-files, placed them in the `Tiled/tilesets` folder of this repository's files.
+![image](https://user-images.githubusercontent.com/204594/141985706-009e97d7-2abc-413b-ab14-0860a3a86198.png)
+
+This should should give you the 9 needed PNG-files, placed them in the `Tiled/tilesets` folder of this repository's files.
 
     Tiled/tilesets/catacombs_mega_special.png
     Tiled/tilesets/cathedral_mega_special.png
@@ -25,6 +27,8 @@ This should should give you the 7 needed PNG-files, placed them in the `Tiled/ti
     Tiled/tilesets/monsters.png
     Tiled/tilesets/objects.png
     Tiled/tilesets/tristram_mega_special.png
+    Tiled/tilesets/l5_til.png
+    Tiled/tilesets/l6_til.png
 
 ### Setting up tiled
 
