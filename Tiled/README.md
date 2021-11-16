@@ -12,7 +12,7 @@ First step is to download and install [Tiled](https://www.mapeditor.org/), we re
 
 Then download [this repository](https://github.com/diasurgical/modding-tools/archive/master.zip).
 
-Next you will need a PNG version of the tile sheets, this can be done using [Open source-ami](https://github.com/sanctuary/opensource-ami).
+Next you will need a PNG version of the tile sheets, this can be done using [Diablo 1 Graphics Tool](https://github.com/savagesteel/d1-graphics-tool).
 
 Open each level cel file and export them as a png:
 
