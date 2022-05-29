@@ -176,8 +176,8 @@ var dunMapFormat = {
 					var obj = layer.objects[j];
 					if (!obj)
 						continue; // Skip recently deleted objects
-					var x = obj.x / 32 - 1;
-					var y = obj.y / 32 - 1;
+					var x = Math.round(obj.x / 32 - 1);
+					var y = Math.round(obj.y / 32 - 1);
 					if (obj.tile && obj.tile.tileset.name == "monsters") {
 						var mi = monsterIdToTileId.indexOf(obj.tile.id);
 						if (mi == -1) {
