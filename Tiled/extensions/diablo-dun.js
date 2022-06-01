@@ -421,6 +421,14 @@ var objectIdToTileId = [
 	47, // OBJ_LAZSTAND,
 	 8, // OBJ_BOOKSTAND,
 	12, // OBJ_BOOKSHELFR,
+	68, // OBJ_POD,
+	69, // OBJ_PODEX,
+	70, // OBJ_URN,
+	71, // OBJ_URNEX,
+	72, // OBJ_L5BOOKS,
+	73, // OBJ_L5CANDLE,
+	74, // OBJ_L5LEVER,
+	75, // OBJ_L5SARC,
 ];
 
 /**
