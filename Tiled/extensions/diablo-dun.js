@@ -295,35 +295,35 @@ var monsterIdToTileId = [
 	 -1, -1,
 	 76, // Brute
 	107, // Malignus
-	 -1, // Hellfire: Hellboar
-	 -1, // Hellfire: Stinger
-	 -1, // Hellfire: Psychorb
-	 -1, // Hellfire: Arachnon
-	 -1, // Hellfire: Felltwin
-	 -1, // Hellfire: Hork Spawn
-	 -1, // Hellfire: Stinger (duplicate)
-	 -1, // Hellfire: Psychorb (duplicate)
-	 -1, // Hellfire: Arachnon (duplicate)
-	 -1, // Hellfire: Lashworm
-	 -1, // Hellfire: Torchant
-	 -1, // Hellfire: Hork Demon
-	 -1, // Hellfire: Hell Bug
-	 -1, // Hellfire: Gravedigger
-	 -1, // Hellfire: Tomb Rat
-	 -1, // Hellfire: Firebat
-	 -1, // Hellfire: Skullwing
-	 -1, // Hellfire: Lich
-	 -1, // Hellfire: Crypt Demon
-	 -1, // Hellfire: Firebat (duplicate)
-	 -1, // Hellfire: Skullwing (duplicate)
-	 -1, // Hellfire: Lich (duplicate)
-	 -1, // Hellfire: Biclops
-	 -1, // Hellfire: Flesh Thing
-	 -1, // Hellfire: Reaper
-	 -1, // Hellfire: Na-Krul
+	111, // Hellfire: Hellboar
+	116, // Hellfire: Stinger
+	114, // Hellfire: Psychorb
+	108, // Hellfire: Arachnon
+	110, // Hellfire: Felltwin
+	112, // Hellfire: Hork Spawn
+	117, // Hellfire: Venomtail
+	115, // Hellfire: Necromorb
+	109, // Hellfire: Spider Lord
+	113, // Hellfire: Lashworm
+	118, // Hellfire: Torchant
+	131, // Hellfire: Hork Demon
+	132, // Hellfire: Hell Bug
+	124, // Hellfire: Gravedigger
+	130, // Hellfire: Tomb Rat
+	121, // Hellfire: Firebat
+	128, // Hellfire: Skullwing
+	125, // Hellfire: Lich
+	120, // Hellfire: Crypt Demon
+	122, // Hellfire: Hellbat
+	129, // Hellfire: Bone Demon
+	126, // Hellfire: Arch Lich
+	119, // Hellfire: Biclops
+	123, // Hellfire: Flesh Thing
+	127, // Hellfire: Reaper
+	133, // Hellfire: Na-Krul
 	 51, // The Butcher
 	 28, // Invisible Lord
-	 33, // Blightstone the Weak
+	 33, // Hellfire: Satyr Lord
 ];
 
 /** Map object tileset to dun ids (ObjTypeConv) */
