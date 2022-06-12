@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.5" tiledversion="1.7.2" name="caves" tilewidth="128" tileheight="192" tilecount="160" columns="16">
  <grid orientation="isometric" width="128" height="192"/>
- <image source="caves_mega.png" width="2048" height="1920"/>
+ <image source="l3_til.png" width="2048" height="1920"/>
  <tile id="140" probability="0.1"/>
  <tile id="141" probability="0.1"/>
  <tile id="142" probability="0.1"/>
