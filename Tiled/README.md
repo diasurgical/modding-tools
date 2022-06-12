@@ -12,19 +12,41 @@ First step is to download and install [Tiled](https://www.mapeditor.org/), we re
 
 Then download [this repository](https://github.com/diasurgical/modding-tools/archive/master.zip).
 
-Next you will need a PNG version of the tile sheets, this can be done using [Open source-ami](https://github.com/sanctuary/opensource-ami). Follow the main usage instructions, then run the `convert_mega_tilesets`, `gen_monsters_tilset` and `gen_objects_tileset` scripts.
+Next, you will need an MPQ Editor to extract the necessary files, downloads are available at the top of the page: [Ladik's MPQ Editor](http://www.zezula.net/en/mpq/download.html).
 
-**Note**: for Windows users we provide a helper script in the [windows-x86-scripts folder](https://github.com/diasurgical/modding-tools/tree/master/windows-x86-scripts), this need to be used together with Open source-ami.
+Open diabdat.mpq, and later hellfire.mpq.
+![openmpq](https://user-images.githubusercontent.com/60329165/142060379-a58d7856-1ea4-4253-b446-a803e1cc44ef.png)
 
-This should should give you the 7 needed PNG-files, placed them in the `Tiled/tilesets` folder of this repository's files.
+It will ask for a listfile, scroll to the bottom of the page: [Listfile](http://www.zezula.net/en/mpq/download.html#ListFiles).
 
-    Tiled/tilesets/catacombs_mega_special.png
-    Tiled/tilesets/cathedral_mega_special.png
-    Tiled/tilesets/caves_mega.png
-    Tiled/tilesets/hell_mega.png
-    Tiled/tilesets/monsters.png
-    Tiled/tilesets/objects.png
-    Tiled/tilesets/tristram_mega_special.png
+Click the three dots ... on the top right, highlighted in blue to provide the MPQ editor with the listfile.
+![Listfile](https://user-images.githubusercontent.com/60329165/142060849-2c75231c-3133-4722-ac8f-c7e5d6ab003a.png)
+
+Once the mpqs are opened with the listfile, you must extract the 'levels' folder from diabdat.mpq and the 'Nlevels' folder from hellfire.mpq
+
+Next you will need a .png version of the tile sheets, this can be done using [Diablo 1 Graphics Tool](https://github.com/savagesteel/d1-graphics-tool).
+
+Once in D1GraphicsTool, open each level .cel file:
+
+![cel](https://user-images.githubusercontent.com/60329165/142061417-9965d037-59c0-4823-84e2-44d376d2ff84.png)
+
+Export each .cel, one at a time, into a .png spritesheet with the following settings:
+
+![image](https://user-images.githubusercontent.com/204594/141985706-009e97d7-2abc-413b-ab14-0860a3a86198.png)
+
+If you wish to get the spritesheet for Hellfire's town, instead of Vanilla, you must use the town.cel file in the 'Nlevels' folder extracted from hellfire.mpq.
+
+This should should give you the 7 needed PNG-files for the tiles. Place them in the `Tiled/tilesets` folder of this repository's files.
+
+    Tiled/tilesets/l1_til.png
+    Tiled/tilesets/l2_til.png
+    Tiled/tilesets/l3_til.png
+    Tiled/tilesets/l4_til.png
+    Tiled/tilesets/l5_til.png
+    Tiled/tilesets/l6_til.png
+    Tiled/tilesets/town_til.png
+    
+*Note that D1Graphicstool cannot export spritesheets for monsters and objects.
 
 ### Setting up tiled
 
