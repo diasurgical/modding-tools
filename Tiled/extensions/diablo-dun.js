@@ -34,13 +34,13 @@ var dunMapFormat = {
 			map.addTileset(tiled.openAssets[t]);
 		}
 		if (!mainTileset) {
-			tiled.alert("You must have the dungion tilset open or no tiles will be loaded");
+			tiled.alert("You must have the dungeon tileset open or no tiles will be loaded");
 		}
 		if (!monsterTileset) {
-			tiled.alert("You must have the monster tilset open or no monsters will be loaded");
+			tiled.alert("You must have the monster tileset open or no monsters will be loaded");
 		}
 		if (!objectTileset) {
-			tiled.alert("You must have the monster tilset open or no objects will be loaded");
+			tiled.alert("You must have the object tileset open or no objects will be loaded");
 		}
 
 		layer = new TileLayer("Tile Layer 1");
@@ -134,8 +134,8 @@ var dunMapFormat = {
 		// Tracking what has been converted in to larger rectangles
 		trans = init2DArray(dunWidth, dunHeight);
 
-		// Transparancy
-		var transparancy = new ObjectGroup("Transparency");
+		// Transparency
+		var transparency = new ObjectGroup("Transparency");
 		for (var y = 0; y < dunHeight; y++) {
 			for (var x = 0; x < dunWidth; x++) {
 				var roomId = view.getInt16(2 * i++, true);
@@ -143,10 +143,10 @@ var dunMapFormat = {
 					continue;
 				}
 				var rect = findTransRectangle(view, x, y, dunWidth, dunHeight, i - 1, roomId);
-				transparancy.addObject(rect);
+				transparency.addObject(rect);
 			}
 		}
-		map.addLayer(transparancy);
+		map.addLayer(transparency);
 
 		return map;
 	},
@@ -193,7 +193,7 @@ var dunMapFormat = {
 						}
 						objIds[x][y] = oi;
 					} else if (!obj.tile && layer.name == "Transparency") {
-						applyTransparancy(dunWidth, dunHeight, obj);
+						applyTransparency(dunWidth, dunHeight, obj);
 					}
 				}
 			}
@@ -206,7 +206,7 @@ var dunMapFormat = {
 			+ dunWidth * dunHeight // unused
 			+ dunWidth * dunHeight // monsters
 			+ dunWidth * dunHeight // objects
-			+ dunWidth * dunHeight // transparancy
+			+ dunWidth * dunHeight // transparency
 		));
 
 		var view = new DataView(buffer);
@@ -239,7 +239,7 @@ var dunMapFormat = {
 				view.setInt16(2 * i++, objIds[x][y], true);
 			}
 		}
-		// Transparancy
+		// Transparency
 		for (var y = 0; y < dunHeight; y++) {
 			for (var x = 0; x < dunWidth; x++) {
 				view.setInt16(2 * i++, trans[x][y], true);
@@ -444,9 +444,9 @@ function init2DArray(dunWidth, dunHeight) {
 }
 
 /**
- * Mark dPieces with in transparent areas with the transparancy id
+ * Mark dPieces with in transparent areas with the transparency id
  */
-function applyTransparancy(width, height, obj) {
+function applyTransparency(width, height, obj) {
 	if (obj.shape == MapObject.Rectangle) {
 		var polygon = [
 			{x: obj.x, y: obj.y },
@@ -462,7 +462,7 @@ function applyTransparancy(width, height, obj) {
 			polygon[i].y += obj.y;
 		}
 	} else {
-		tiled.alert("Only rectangles and polygons are supported for transparancy");
+		tiled.alert("Only rectangles and polygons are supported for transparency");
 		return;
 	}
 
@@ -522,7 +522,7 @@ function findTransRectangle(view, xStart, yStart, dunWidth, dunHeight, offset, r
 }
 
 /**
- * Check if a cordinate is inside a polygon
+ * Check if a coordinate is inside a polygon
  * @see http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
  */
 function isInside(x, y, polygon) {
