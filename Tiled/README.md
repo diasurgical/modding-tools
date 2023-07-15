@@ -52,7 +52,7 @@ First open the project file `diablo.tiled-project` in the `Tiled` folder of this
 
 From the menu select `Project->Project Properties`, here you need to point Tiled to the `extensions` folder and the `rules.txt` file:
 
-![Project Properties](docs/images/project-properrties.png)
+![Project Properties](docs/images/project-properties.png)
 
 Next go to `Edit->Preferences->Interface` and change `Fine grid divisions` to `2`.
 
