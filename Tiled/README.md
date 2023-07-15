@@ -64,12 +64,12 @@ Then from the `View` menu set `Snapping` to `Snap to Fine Grid`
 
 ![tileset columns message](docs/images/tileset-columns-message.png)
 
-To open a DUN-file file used by Diablo you need to first have the following two tilesets opened:
+To open a DUN-file used by Diablo you need to first have the following two tilesets opened:
 
     Tiled\tilesets\monsters.tsx
     Tiled\tilesets\objects.tsx
 
-Any dungeon tilesets used by the DUN-file file must also be opened:
+Any dungeon tilesets used by the DUN-file must also be opened:
 
     Tiled\tilesets\cathedral_mega.tsx
     Tiled\tilesets\catacombs_mega.tsx
