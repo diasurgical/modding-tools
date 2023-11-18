@@ -2,7 +2,7 @@ import bpy
 from math import radians
 import time
 
-# This script will render the animation from 8 angles for use as a Monster i Diablo
+# This Blender script will render the animation from 8 angles for use as a Monster i Diablo
 #
 # How to use:
 # 1: Configure the render Output path.
