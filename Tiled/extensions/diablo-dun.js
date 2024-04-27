@@ -7,6 +7,8 @@ var dunMapFormat = {
 	read: function(fileName) {
 		var file = new BinaryFile(fileName, BinaryFile.ReadOnly);
 		var buffer = file.readAll();
+		file.close();
+
 		var view = new DataView(buffer);
 		var i = 0; // uint16 offset
 
@@ -250,6 +252,7 @@ var dunMapFormat = {
 		var file = new BinaryFile(fileName, BinaryFile.WriteOnly);
 		file.write(buffer);
 		file.commit();
+		file.close();
 	},
 }
 
