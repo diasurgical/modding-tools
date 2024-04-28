@@ -1,5 +1,3 @@
-var trans;
-
 var dunMapFormat = {
 	name: "Diablo map format",
 	extension: "dun",
@@ -133,19 +131,29 @@ var dunMapFormat = {
 			return map;
 		}
 
-		// Tracking what has been converted in to larger rectangles
-		trans = init2DArray(dunWidth, dunHeight);
-
 		// Transparency
-		var transparency = new ObjectGroup("Transparency");
+		var trans = init2DArray(dunWidth, dunHeight);
+		var visited = init2DArray(dunWidth, dunHeight);
 		for (var y = 0; y < dunHeight; y++) {
 			for (var x = 0; x < dunWidth; x++) {
 				var roomId = view.getInt16(2 * i++, true);
-				if (!roomId || trans[x][y]) {
+				trans[x][y] = roomId;
+				visited[x][y] = false;
+			}
+		}
+
+		var transparency = new ObjectGroup("Transparency");
+		for (var y = 0; y < dunHeight; y++) {
+			for (var x = 0; x < dunWidth; x++) {
+				if (visited[x][y])
 					continue;
-				}
-				var rect = findTransRectangle(view, x, y, dunWidth, dunHeight, i - 1, roomId);
-				transparency.addObject(rect);
+				var position = { x: x, y: y };
+				visitTransPolygon(trans, visited, position);
+
+				if (trans[x][y] === 0)
+					continue;
+				var poly = findTransPolygon(trans, position);
+				transparency.addObject(poly);
 			}
 		}
 		map.addLayer(transparency);
@@ -162,7 +170,7 @@ var dunMapFormat = {
 		var tileIDs = init2DArray(map.width, map.height);
 		var monstIds = init2DArray(dunWidth, dunHeight);
 		var objIds = init2DArray(dunWidth, dunHeight);
-		trans = init2DArray(dunWidth, dunHeight);
+		var trans = init2DArray(dunWidth, dunHeight);
 
 		// Combine layers
 		for (var i = 0; i < map.layerCount; i++) {
@@ -195,7 +203,7 @@ var dunMapFormat = {
 						}
 						objIds[x][y] = oi;
 					} else if (!obj.tile && layer.name == "Transparency") {
-						applyTransparency(dunWidth, dunHeight, obj);
+						applyTransparency(trans, dunWidth, dunHeight, obj);
 					}
 				}
 			}
@@ -252,7 +260,6 @@ var dunMapFormat = {
 		var file = new BinaryFile(fileName, BinaryFile.WriteOnly);
 		file.write(buffer);
 		file.commit();
-		file.close();
 	},
 }
 
@@ -438,18 +445,18 @@ var objectIdToTileId = [
  * Create and fill a 2D array with 0s
  */
 function init2DArray(dunWidth, dunHeight) {
-	var trans = new Array(dunWidth);
+	var arr = new Array(dunWidth);
 	for (var x = 0; x < dunWidth; x++) {
-		trans[x] = new Array(dunHeight).map(function(){return 0;});
+		arr[x] = new Array(dunHeight).map(function(){return 0;});
 	}
 
-	return trans;
+	return arr;
 }
 
 /**
  * Mark dPieces with in transparent areas with the transparency id
  */
-function applyTransparency(width, height, obj) {
+function applyTransparency(trans, width, height, obj) {
 	if (obj.shape == MapObject.Rectangle) {
 		var polygon = [
 			{x: obj.x, y: obj.y },
@@ -459,10 +466,12 @@ function applyTransparency(width, height, obj) {
 			{x: obj.x, y: obj.y },
 		];
 	} else if (obj.shape == MapObject.Polygon) {
-		polygon = obj.polygon;
-		for (var i = 0; i < polygon.length; i++) {
-			polygon[i].x += obj.x;
-			polygon[i].y += obj.y;
+		polygon = [];
+		for (var i = 0; i < obj.polygon.length; i++) {
+			polygon.push({
+				x: obj.polygon[i].x + obj.x,
+				y: obj.polygon[i].y + obj.y
+			});
 		}
 	} else {
 		tiled.alert("Only rectangles and polygons are supported for transparency");
@@ -482,45 +491,132 @@ function applyTransparency(width, height, obj) {
 	}
 }
 
-function findTransRow(view, xStart, y, dunWidth, offset, matchId) {
-	var width = 0;
-	for (var x = xStart; x < dunWidth; x++) {
-		var roomId = view.getInt16(2 * offset++, true);
-		if (roomId != matchId || trans[x][y]) {
-			break;
-		}
-		width++;
+/**
+ * Flood fill values in visited array so we know which tiles are included in the polygon
+ */
+function visitTransPolygon(trans, visited, position) {
+	var polygonRoomId = trans[position.x][position.y];
+	var visitQueue = [];
+
+	function enqueue(tile) {
+		visited[tile.x][tile.y] = true;
+		visitQueue.push(tile);
 	}
 
-	return width;
+	function canVisit(tile) {
+		var x = tile.x;
+		var y = tile.y;
+
+		if (x < 0 || x >= trans.length)
+			return false;
+		if (y < 0 || y >= trans[x].length)
+			return false;
+		if (visited[x][y])
+			return false;
+
+		var roomId = trans[x][y];
+		return roomId === polygonRoomId;
+	}
+
+	function visit(tile) {
+		var x = tile.x;
+		var y = tile.y;
+
+		var adjacentTiles = [
+			{ x: x - 1, y: y },
+			{ x: x + 1, y: y },
+			{ x: x, y: y - 1 },
+			{ x: x, y: y + 1 }
+		];
+
+		var validTiles = adjacentTiles.filter(canVisit);
+		for (var i = 0; i < validTiles.length; i++)
+			enqueue(validTiles[i]);
+	}
+
+	enqueue(position);
+	while (visitQueue.length > 0)
+		visit(visitQueue.shift());
 }
 
-function findTransRectangle(view, xStart, yStart, dunWidth, dunHeight, offset, roomId) {
-	var width = findTransRow(view, xStart, yStart, dunWidth, offset, roomId);
+/**
+ * Trace the outer edge of the transparency region to build a polygon around it
+ */
+function findTransPolygon(trans, start) {
+	function getRoomId(x, y) {
+		if (x < 0 || x >= trans.length)
+			return null;
+		if (y < 0 || y >= trans[x].length)
+			return null;
+		return trans[x][y];
+	}
 
-	var height = 0;
-	for (var y = yStart; y < dunHeight; y++) {
-		if (width != findTransRow(view, xStart, y, dunWidth, offset, roomId)) {
-			break;
-		}
-		for (var x = xStart; x < width + xStart; x++) {
-			trans[x][y] = roomId; // Mark row as mapped
-		}
-		height++;
-		offset += dunWidth;
+	var polyRoomId = getRoomId(start.x, start.y);
+	function isInRoom(x, y) {
+		var tileRoomId = getRoomId(x, y);
+		return polyRoomId === tileRoomId;
+	}
+
+	var x = start.x;
+	var y = start.y;
+	while (isInRoom(x - 1, y))
+		x--;
+
+	var left = {};
+	var up = {};
+	var right = {};
+	var down = {};
+	var direction = {};
+	function goLeft()  { x--; direction = left;  }
+	function goUp()    { y--; direction = up;    }
+	function goRight() { x++; direction = right; }
+	function goDown()  { y++; direction = down;  }
+
+	// Shapes look like this:
+	// .. .. .. .4 .5 .6 .7 8. 9. A. B. CC DD EE FF
+	// .1 2. 33 .. .5 6. 77 .. .9 A. BB .. .D E. FF
+	function getShape(x, y) {
+		var shape = 0;
+		shape += isInRoom(x - 1, y - 1) ? 8 : 0;
+		shape += isInRoom(x - 0, y - 1) ? 4 : 0;
+		shape += isInRoom(x - 1, y - 0) ? 2 : 0;
+		shape += isInRoom(x - 0, y - 0) ? 1 : 0;
+		return shape;
+	}
+
+	var cornerShapes = [0x1, 0x2, 0x4, 0x6, 0x7, 0x8, 0x9, 0xB, 0xD, 0xE];
+	var leftShapes   = [0x8, 0x9, 0xC, 0xD, 0xF];
+	var upShapes     = [0x4, 0x5, 0x6, 0x7, 0xF];
+	var rightShapes  = [0x1, 0x3, 0x9, 0xB, 0xF];
+	var downShapes   = [0x2, 0x6, 0xA, 0xE, 0xF];
+
+	var points = [];
+	while (points.length === 0 || points[0].x !== x || points[0].y !== y) {
+		var shape = getShape(x, y);
+
+		if (cornerShapes.includes(shape))
+			points.push(Qt.point(x, y));
+
+		if (direction !== right && leftShapes.includes(shape))
+			goLeft();
+		else if (direction !== down && upShapes.includes(shape))
+			goUp();
+		else if (direction !== left && rightShapes.includes(shape))
+			goRight();
+		else if (direction !== up && downShapes.includes(shape))
+			goDown();
+	}
+	points.push(Qt.point(x, y));
+
+	for (var i = 0; i < points.length; i++) {
+		points[i].x *= 32;
+		points[i].y *= 32;
 	}
 
 	var object = new MapObject();
-	if (roomId != 1) {
-		object.name = roomId.toString();
-	}
-	object.shape = MapObject.Rectangle;
-
-	object.x = xStart * 32;
-	object.y = yStart * 32;
-	object.width = width * 32;
-	object.height = height * 32;
-
+	object.name = polyRoomId.toString();
+	object.shape = MapObject.Polygon;
+	object.polygon = points;
 	return object;
 }
 
