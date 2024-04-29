@@ -585,10 +585,10 @@ function findTransPolygon(trans, start) {
 	}
 
 	var cornerShapes = [0x1, 0x2, 0x4, 0x6, 0x7, 0x8, 0x9, 0xB, 0xD, 0xE];
-	var leftShapes   = [0x8, 0x9, 0xC, 0xD, 0xF];
-	var upShapes     = [0x4, 0x5, 0x6, 0x7, 0xF];
-	var rightShapes  = [0x1, 0x3, 0x9, 0xB, 0xF];
-	var downShapes   = [0x2, 0x6, 0xA, 0xE, 0xF];
+	var leftShapes   = [0x8, 0xC, 0xD];
+	var upShapes     = [0x4, 0x5, 0x7];
+	var rightShapes  = [0x1, 0x3, 0xB];
+	var downShapes   = [0x2, 0xA, 0xE];
 
 	var points = [];
 	while (points.length === 0 || points[0].x !== x || points[0].y !== y) {
@@ -597,14 +597,25 @@ function findTransPolygon(trans, start) {
 		if (cornerShapes.includes(shape))
 			points.push(Qt.point(x, y));
 
-		if (direction !== right && leftShapes.includes(shape))
+		// Movements are determined by traversing the polygon clockwise
+		if (leftShapes.includes(shape))
 			goLeft();
-		else if (direction !== down && upShapes.includes(shape))
+		else if (upShapes.includes(shape))
 			goUp();
-		else if (direction !== left && rightShapes.includes(shape))
+		else if (rightShapes.includes(shape))
 			goRight();
-		else if (direction !== up && downShapes.includes(shape))
+		else if (downShapes.includes(shape))
 			goDown();
+		else if (direction === left && shape === 0x6)
+			goUp();
+		else if (direction === up && shape === 0x9)
+			goRight();
+		else if (direction === right && shape === 0x6)
+			goDown();
+		else if (direction === down && shape === 0x9)
+			goLeft();
+		else
+			goRight();
 	}
 	points.push(Qt.point(x, y));
 
