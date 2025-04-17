@@ -150,7 +150,7 @@ var dunMapFormat = {
 				var position = { x: x, y: y };
 				visitTransPolygon(trans, visited, position);
 
-				if (trans[x][y] === 0)
+				if (trans[x][y] === 0 && !isInsideAny(x, y, transparency.objects))
 					continue;
 				var poly = findTransPolygon(trans, position);
 				transparency.addObject(poly);
@@ -481,7 +481,7 @@ function applyTransparency(trans, width, height, obj) {
 	for (var y = 0; y < height; y++) {
 		for (var x = 0; x < width; x++) {
 			if (isInside(x, y, polygon)) {
-				if (parseInt(obj.name) > 1) {
+				if (parseInt(obj.name) >= 0) {
 					trans[x][y] = parseInt(obj.name);
 				} else {
 					trans[x][y] = 1;
@@ -629,6 +629,10 @@ function findTransPolygon(trans, start) {
 	object.shape = MapObject.Polygon;
 	object.polygon = points;
 	return object;
+}
+
+function isInsideAny(x, y, objects) {
+	return objects.some(object => isInside(x, y, object.polygon));
 }
 
 /**
